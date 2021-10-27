@@ -14,7 +14,7 @@ const pkg = require( 'json-file' ).read( './package.json' ).data;
 const cfg = {};
 
 // Build Paths.
-cfg.name = 'lazy-blocks';
+cfg.name = 'wp-blocks';
 cfg.src = './src';
 cfg.dist_root = './dist';
 cfg.dist = '{dist_root}/{name}';
