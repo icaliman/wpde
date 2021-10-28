@@ -1,4 +1,4 @@
-# WPDE - WordPress Development
+# WPDE - WordPress Development Environment
 
 ## Installation
 
@@ -14,7 +14,7 @@ const pkg = require( 'json-file' ).read( './package.json' ).data;
 const cfg = {};
 
 // Build Paths.
-cfg.name = 'wp-blocks';
+cfg.name = 'plugin-name';
 cfg.src = './src';
 cfg.dist_root = './dist';
 cfg.dist = '{dist_root}/{name}';
@@ -33,6 +33,10 @@ cfg.template_files_variables = {
     plugin_title: pkg.title,
     plugin_author: pkg.author,
 };
+
+// Clean files.
+cfg.clean_files = '{dist}';
+cfg.clean_files_opts = { force: true };
 
 // Copy files.
 cfg.copy_files_src = [

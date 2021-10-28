@@ -1,7 +1,7 @@
 {
   "name": "wpde",
-  "version": "1.0.1",
-  "description": "WPDE - Wordpress Development",
+  "version": "1.0.2",
+  "description": "WPDE - Wordpress Development Environment",
   "license": "MIT",
   "homepage": "https://github.com/icaliman/wpde",
   "author": "xlite.dev <https://xlite.dev>",
