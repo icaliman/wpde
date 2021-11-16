@@ -1,72 +1,73 @@
-const gulp = require( 'gulp' );
-const Fiber = require( 'fibers' );
-const autoprefixer = require( 'autoprefixer' );
-const sass = require( 'gulp-sass' );
-const gulpLoadPlugins = require( 'gulp-load-plugins' );
+const gulp = require("gulp");
+const Fiber = require("fibers");
+const autoprefixer = require("autoprefixer");
+const sass = require("gulp-sass");
+const gulpLoadPlugins = require("gulp-load-plugins");
 
-const plumberErrorHandler = require( '../plumber-error-handler' );
-const generateCSSComments = require( '../generate-css-comments' );
+const plumberErrorHandler = require("../plumber-error-handler");
+const generateCSSComments = require("../generate-css-comments");
 
 const $ = gulpLoadPlugins();
 
 // Use Dart Sass https://sass-lang.com/dart-sass.
-sass.compiler = require( 'sass' );
+sass.compiler = require("sass");
 
 module.exports = {
-	label: 'SCSS Compiler',
-	isAllowed( cfg ) {
-		return cfg.compile_scss_files_src && cfg.compile_scss_files_dist;
-	},
-	fn: ( isDev, browserSync ) => ( cfg ) =>
-		gulp
-			.src( cfg.compile_scss_files_src, cfg.compile_scss_files_src_opts )
-			.pipe(
-				$.plumber( {
-					errorHandler: plumberErrorHandler,
-					inherit: isDev,
-				} )
-			)
+    label: "SCSS Compiler",
+    isAllowed(cfg) {
+        return cfg.compile_scss_files_src && cfg.compile_scss_files_dist;
+    },
+    fn: (isDev, browserSync) => (cfg) =>
+        gulp
+            .src(cfg.compile_scss_files_src, cfg.compile_scss_files_src_opts)
+            .pipe(
+                $.plumber({
+                    errorHandler: plumberErrorHandler,
+                    inherit: isDev,
+                })
+            )
 
-			// Sourcemaps Init
-			.pipe( $.if( isDev, $.sourcemaps.init() ) )
+            // Sourcemaps Init
+            .pipe($.if(isDev, $.sourcemaps.init()))
 
-			// SCSS
-			.pipe(
-				$.sassVariables( {
-					$rtl: false,
-				} )
-			)
-			.pipe(
-				sass( {
-					fiber: Fiber,
-					outputStyle: cfg.compile_scss_files_compress
-						? 'compressed'
-						: 'expanded',
-				} ).on( 'error', sass.logError )
-			)
+            // SCSS
+            .pipe(
+                $.sassVariables({
+                    $rtl: false,
+                })
+            )
+            .pipe(
+                sass({
+                    fiber: Fiber,
+                    outputStyle: cfg.compile_scss_files_compress
+                        ? "compressed"
+                        : "expanded",
+                    includePaths: cfg.compile_scss_include_paths,
+                }).on("error", sass.logError)
+            )
 
-			// Autoprefixer
-			.pipe( $.postcss( [ autoprefixer() ] ) )
+            // Autoprefixer
+            .pipe($.postcss([autoprefixer()]))
 
-			// Add TOC Comments
-			.pipe( $.changeFileContent( generateCSSComments ) )
+            // Add TOC Comments
+            .pipe($.changeFileContent(generateCSSComments))
 
-			// Rename
-			.pipe(
-				$.if(
-					cfg.compile_scss_files_compress,
-					$.rename( {
-						suffix: '.min',
-					} )
-				)
-			)
+            // Rename
+            .pipe(
+                $.if(
+                    cfg.compile_scss_files_compress,
+                    $.rename({
+                        suffix: ".min",
+                    })
+                )
+            )
 
-			// Sourcemaps
-			.pipe( $.if( isDev, $.sourcemaps.write() ) )
+            // Sourcemaps
+            .pipe($.if(isDev, $.sourcemaps.write()))
 
-			// Dest
-			.pipe( gulp.dest( cfg.compile_scss_files_dist ) )
+            // Dest
+            .pipe(gulp.dest(cfg.compile_scss_files_dist))
 
-			// Browser Sync
-			.pipe( browserSync.stream() ),
+            // Browser Sync
+            .pipe(browserSync.stream()),
 };

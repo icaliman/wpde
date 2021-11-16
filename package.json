@@ -1,6 +1,6 @@
 {
   "name": "wpde",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "WPDE - Wordpress Development Environment",
   "license": "MIT",
   "homepage": "https://github.com/icaliman/wpde",
@@ -16,20 +16,24 @@
     "update-git-hooks": "npx simple-git-hooks"
   },
   "devDependencies": {
-    "@wordpress/eslint-plugin": "^9.2.0",
+    "@wordpress/eslint-plugin": "^9.3.0",
+    "eslint": "^8.2.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "lint-staged": "^10.5.4",
-    "simple-git-hooks": "^2.6.1"
+    "prettier": "^2.4.1",
+    "simple-git-hooks": "^2.7.0"
   },
   "dependencies": {
-    "@babel/core": "^7.15.8",
-    "@babel/preset-env": "^7.15.8",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
     "autoprefixer": "^9.8.8",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
-    "browser-sync": "^2.27.6",
+    "browser-sync": "^2.27.7",
     "chalk": "^4.1.2",
     "css-loader": "^5.2.7",
     "del": "^6.0.0",
+    "eslint-plugin-import": "^2.25.3",
     "fibers": "^5.0.0",
     "gulp": "^4.0.2",
     "gulp-change-file-content": "^1.0.1",
@@ -54,13 +58,13 @@
     "pretty-hrtime": "^1.0.3",
     "rtlcss": "^2.6.2",
     "sass": "^1.43.4",
-    "sass-loader": "^12.0.2",
+    "sass-loader": "^12.3.0",
     "spinnies": "^0.5.1",
     "strftime": "^0.10.0",
     "string-template": "^1.0.0",
     "style-loader": "^2.0.0",
     "vinyl-named-with-path": "^1.0.0",
-    "webpack": "^5.60.0",
+    "webpack": "^5.64.1",
     "webpack-stream": "^6.1.2"
   }
 }
