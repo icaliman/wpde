@@ -37,7 +37,6 @@ async function replaceAsync(str, regex, asyncFn) {
     const promises = [];
     str.replace(regex, (match, ...args) => {
         const [content, ...filters] = match.split("|");
-        console.log(content, filters);
 
         const promise = asyncFn(content, ...args);
         promises.push(
