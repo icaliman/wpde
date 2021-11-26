@@ -34,10 +34,10 @@ cfg.template_files_variables = {
     plugin_author: pkg.author,
     'icon:*': function (icon) {
         try {
-        return fs.readFileSync(path.join('./src/assets/icons', icon));
+            return fs.readFileSync(path.join('./src/assets/icons', icon));
         } catch (e) {
-        console.error('Error while reading icon file', e.message);
-        return icon;
+            console.error('Error while reading icon file', e.message);
+            return icon;
         }
     },
 };
