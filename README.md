@@ -32,7 +32,18 @@ cfg.template_files_variables = {
     plugin_name: pkg.name,
     plugin_title: pkg.title,
     plugin_author: pkg.author,
+    'icon:*': function (icon) {
+        try {
+        return fs.readFileSync(path.join('./src/assets/icons', icon));
+        } catch (e) {
+        console.error('Error while reading icon file', e.message);
+        return icon;
+        }
+    },
 };
+
+// Path to icons included into templates
+cfg.template_icons_path = '{src}/assets/icons';
 
 // Clean files.
 cfg.clean_files = '{dist}';

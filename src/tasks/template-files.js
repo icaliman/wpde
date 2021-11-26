@@ -16,10 +16,16 @@ function replacePatterns(cont, patterns) {
     if (patterns && patterns.length) {
         patterns.forEach((pattern) => {
             if (pattern.match) {
-                const matchEscaped = pattern.match.replace(
+                let matchEscaped = pattern.match.replace(
                     /([.*+?^${}()|[\]/\\])/g,
                     "\\$1"
                 );
+
+                // Match custom patterns
+                if (matchEscaped.endsWith("\\*")) {
+                    matchEscaped = matchEscaped.replace("\\*", "[.\\w\\d_-]+");
+                }
+
                 cont = cont.replace(
                     new RegExp(`@@${matchEscaped}`, "g"),
                     pattern.replacement || ""
