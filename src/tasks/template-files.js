@@ -5,6 +5,26 @@ const plumberErrorHandler = require("../plumber-error-handler");
 
 const $ = gulpLoadPlugins();
 
+const filterMap = {
+    escape: async (str) => escape(str),
+};
+
+/**
+ * Apply filters.
+ *
+ * @param {string} str
+ * @param {Array} filters
+ * @return {*} Content with applied filters
+ */
+async function applyFilters(str, filters) {
+    for (let i = 0; i < filters.length; i++) {
+        if (filterMap[filters[i]]) {
+            str = await filterMap[filters[i]](str);
+        }
+    }
+    return str;
+}
+
 /**
  * Replace async.
  *
@@ -16,8 +36,15 @@ const $ = gulpLoadPlugins();
 async function replaceAsync(str, regex, asyncFn) {
     const promises = [];
     str.replace(regex, (match, ...args) => {
-        const promise = asyncFn(match, ...args);
-        promises.push(promise);
+        const [content, ...filters] = match.split("|");
+        console.log(content, filters);
+
+        const promise = asyncFn(content, ...args);
+        promises.push(
+            Promise.resolve(promise).then(function (content) {
+                return applyFilters(content, filters);
+            })
+        );
     });
     const data = await Promise.all(promises);
     return str.replace(regex, () => data.shift());
@@ -35,7 +62,7 @@ async function replacePattern(cont, pattern) {
             matchEscaped = matchEscaped.replace("\\*", "[.\\w\\d_-]+");
         }
 
-        const matchRegExp = new RegExp(`@@${matchEscaped}`, "g");
+        const matchRegExp = new RegExp(`@@${matchEscaped}(\\|\\w+)*`, "g");
 
         if ("function" === typeof pattern.replacement) {
             cont = await replaceAsync(cont, matchRegExp, pattern.replacement);
@@ -55,20 +82,13 @@ async function replacePattern(cont, pattern) {
  * @return {*} Content with replaced patterns
  */
 function replacePatterns(cont, patterns, cb) {
-    let index = 0;
-
-    function _replace_next() {
-        if (index >= patterns.length) {
-            return cb(null, cont);
+    (async () => {
+        for (let i = 0; i < patterns.length; i++) {
+            cont = await replacePattern(cont, patterns[i]);
         }
 
-        replacePattern(cont, patterns[index]).then((newCont) => {
-            cont = newCont;
-            index++;
-            _replace_next();
-        });
-    }
-    _replace_next();
+        cb(null, cont);
+    })();
 }
 
 module.exports = {
