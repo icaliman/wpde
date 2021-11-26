@@ -6,35 +6,61 @@ const plumberErrorHandler = require("../plumber-error-handler");
 const $ = gulpLoadPlugins();
 
 /**
+ * Replace async.
+ *
+ * @param {string} str
+ * @param {RegExp}  regex
+ * @param {Function}  asyncFn
+ * @return {*} Content with replaced patterns
+ */
+async function replaceAsync(str, regex, asyncFn) {
+    const promises = [];
+    str.replace(regex, (match, ...args) => {
+        const promise = asyncFn(match, ...args);
+        promises.push(promise);
+    });
+    const data = await Promise.all(promises);
+    return str.replace(regex, () => data.shift());
+}
+
+/**
  * Replace patterns.
  *
  * @param {string} cont
  * @param {Array}  patterns
+ * @param {Function}  cb
  * @return {*} Content with replaced patterns
  */
-function replacePatterns(cont, patterns) {
-    if (patterns && patterns.length) {
-        patterns.forEach((pattern) => {
-            if (pattern.match) {
-                let matchEscaped = pattern.match.replace(
-                    /([.*+?^${}()|[\]/\\])/g,
-                    "\\$1"
-                );
+function replacePatterns(cont, patterns, cb) {
+    let promises = patterns.map(async (pattern) => {
+        if (pattern.match) {
+            let matchEscaped = pattern.match.replace(
+                /([.*+?^${}()|[\]/\\])/g,
+                "\\$1"
+            );
 
-                // Match custom patterns
-                if (matchEscaped.endsWith("\\*")) {
-                    matchEscaped = matchEscaped.replace("\\*", "[.\\w\\d_-]+");
-                }
-
-                cont = cont.replace(
-                    new RegExp(`@@${matchEscaped}`, "g"),
-                    pattern.replacement || ""
-                );
+            // Match custom patterns
+            if (matchEscaped.endsWith("\\*")) {
+                matchEscaped = matchEscaped.replace("\\*", "[.\\w\\d_-]+");
             }
-        });
-    }
 
-    return cont;
+            const matchRegExp = new RegExp(`@@${matchEscaped}`, "g");
+
+            if ("function" === typeof pattern.replacement) {
+                cont = await replaceAsync(
+                    cont,
+                    matchRegExp,
+                    pattern.replacement
+                );
+            } else {
+                cont = cont.replace(matchRegExp, pattern.replacement || "");
+            }
+        }
+    });
+
+    Promise.all(promises).then(() => {
+        cb(null, cont);
+    });
 }
 
 module.exports = {
@@ -66,11 +92,7 @@ module.exports = {
                 })
             )
             .pipe($.if(isDev, $.changed(cfg.template_files_src)))
-            .pipe(
-                $.changeFileContent((content) =>
-                    replacePatterns(content, patterns)
-                )
-            )
+            .pipe($.change((cont, cb) => replacePatterns(cont, patterns, cb)))
             .pipe(gulp.dest(cfg.template_files_dist));
     },
 };

@@ -62,7 +62,7 @@ module.exports = {
             )
 
             // Add TOC Comments
-            .pipe($.changeFileContent(generateCSSComments))
+            .pipe($.change(generateCSSComments))
 
             // Rename
             .pipe(

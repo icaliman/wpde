@@ -50,7 +50,7 @@ module.exports = {
             .pipe($.postcss([autoprefixer()]))
 
             // Add TOC Comments
-            .pipe($.changeFileContent(generateCSSComments))
+            .pipe($.change(generateCSSComments))
 
             // Rename
             .pipe(
