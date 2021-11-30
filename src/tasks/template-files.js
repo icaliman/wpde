@@ -6,7 +6,7 @@ const plumberErrorHandler = require("../plumber-error-handler");
 const $ = gulpLoadPlugins();
 
 const filterMap = {
-    escape: async (str) => escape(str),
+    escape: async (str, args) => escape(str),
 };
 
 /**
@@ -18,8 +18,8 @@ const filterMap = {
  */
 async function applyFilters(str, filters) {
     for (let i = 0; i < filters.length; i++) {
-        if (filterMap[filters[i]]) {
-            str = await filterMap[filters[i]](str);
+        if (filterMap[filters[i].name]) {
+            str = await filterMap[filters[i].name](str);
         }
     }
     return str;
@@ -36,7 +36,15 @@ async function applyFilters(str, filters) {
 async function replaceAsync(str, regex, asyncFn) {
     const promises = [];
     str.replace(regex, (match, ...args) => {
-        const [content, ...filters] = match.split("|");
+        let [content, ...filters] = match.split("|");
+
+        filters = filters.map((filter) => {
+            const [name, ...args] = filter.split(":");
+            return {
+                name,
+                args,
+            };
+        });
 
         const promise = asyncFn(content, filters, ...args);
         promises.push(
@@ -58,10 +66,13 @@ async function replacePattern(cont, pattern) {
 
         // Match custom patterns
         if (matchEscaped.endsWith("\\*")) {
-            matchEscaped = matchEscaped.replace("\\*", "[.\\w\\d_-]+");
+            matchEscaped = matchEscaped.replace("\\*", "[.:\\w\\d_-]+");
         }
 
-        const matchRegExp = new RegExp(`@@${matchEscaped}(\\|\\w+)*`, "g");
+        const matchRegExp = new RegExp(
+            `@@${matchEscaped}(\\|\\w+(:[\\w-]+)*)*`,
+            "g"
+        );
 
         if ("function" === typeof pattern.replacement) {
             cont = await replaceAsync(cont, matchRegExp, pattern.replacement);
