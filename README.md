@@ -74,8 +74,8 @@ cfg.compile_scss_files_src = [
     '!{src}/**/vendor/**/*',
 ];
 cfg.compile_scss_files_src_opts = {};
-cfg.compile_scss_files_compress = 'compressed'; // or expanded
-cfg.compile_scss_include_paths = ['node_modules'];
+cfg.compile_scss_output_style = 'compressed'; // nested | expanded | compact | compressed
+cfg.compile_scss_include_paths = [ 'node_modules' ];
 
 
 // Create additional CSS files with RTL support.
