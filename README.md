@@ -25,6 +25,8 @@ cfg.browser_sync = {
 };
 
 // Template variables that will be automatically replaced.
+// Search and replace all template variables like: @@text_domain, @@text_domain,
+// @@icon:icon-file.svg|className:thfg-svg-icon|escape
 cfg.template_files_src = '{dist}/**/*.{md,php,js,css,pot,json}';
 cfg.template_files_variables = {
     text_domain: pkg.name,
@@ -32,7 +34,17 @@ cfg.template_files_variables = {
     plugin_name: pkg.name,
     plugin_title: pkg.title,
     plugin_author: pkg.author,
-    'icon:*': function (icon) {
+
+    /**
+     * Example how to replace template variable using a callback.
+     *
+     * @param {string} icon   Icon name containing @@icon: prefix, so it must be removed. Example: @@icon:icon-file.svg
+     * @param {array} filters An array of filters. Example: [{name: 'className', args: ['thfg-svg-icon']}, ...]
+     * @return {string|Promise} Content to pe pasted into files.
+     */
+    'icon:*': function (icon, filters) {
+        icon = icon.replace('@@icon:', '');
+
         try {
             return fs.readFileSync(path.join('./src/assets/icons', icon));
         } catch (e) {
