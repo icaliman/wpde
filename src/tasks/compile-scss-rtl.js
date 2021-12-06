@@ -44,9 +44,7 @@ module.exports = {
             .pipe(
                 sass({
                     fiber: Fiber,
-                    outputStyle: cfg.compile_scss_files_compress
-                        ? "compressed"
-                        : "expanded",
+                    outputStyle: cfg.compile_scss_output_style,
                     includePaths: cfg.compile_scss_include_paths,
                 }).on("error", sass.logError)
             )
@@ -67,7 +65,7 @@ module.exports = {
             // Rename
             .pipe(
                 $.if(
-                    !cfg.compile_scss_files_compress,
+                    cfg.compile_scss_output_style !== "compress",
                     $.rename({
                         suffix: "-rtl",
                     })
@@ -75,7 +73,7 @@ module.exports = {
             )
             .pipe(
                 $.if(
-                    cfg.compile_scss_files_compress,
+                    cfg.compile_scss_output_style === "compress",
                     $.rename({
                         suffix: "-rtl.min",
                     })
