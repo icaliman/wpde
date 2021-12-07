@@ -66,7 +66,7 @@ async function replacePattern(cont, pattern) {
 
         // Match custom patterns
         if (matchEscaped.endsWith("\\*")) {
-            matchEscaped = matchEscaped.replace("\\*", "[.:\\w\\d_-]+");
+            matchEscaped = matchEscaped.replace("\\*", "[.:\\w\\d_-/]+");
         }
 
         const matchRegExp = new RegExp(
