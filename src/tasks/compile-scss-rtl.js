@@ -22,7 +22,7 @@ module.exports = {
             cfg.compile_scss_files_dist
         );
     },
-    fn: (isDev, browserSync) => (cfg) =>
+    fn: (isDev) => (cfg) =>
         gulp
             .src(cfg.compile_scss_files_src, cfg.compile_scss_files_src_opts)
             .pipe(
@@ -89,5 +89,5 @@ module.exports = {
             .pipe(gulp.dest(cfg.compile_scss_files_dist))
 
             // Browser Sync
-            .pipe(browserSync.stream()),
+            .pipe($.if(!!cfg.bs, () => cfg.bs.stream())),
 };

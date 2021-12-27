@@ -2,7 +2,7 @@ const gulp = require("gulp");
 const Spinnies = require("spinnies");
 const chalk = require("chalk");
 const prettyHrtime = require("pretty-hrtime");
-const browserSync = require("browser-sync").create();
+const browserSync = require("browser-sync");
 
 // Internal data.
 const allTasks = require("./tasks/index");
@@ -89,60 +89,51 @@ module.exports = function (tasks = [], config) {
     }
 
     // clean dist folder.
-    gulp.task(
-        "clean",
-        runStream("clean", allTasks.clean.fn(isDev, browserSync))
-    );
+    gulp.task("clean", runStream("clean", allTasks.clean.fn(isDev)));
 
     // copy to dist.
-    gulp.task("copy", runStream("copy", allTasks.copy.fn(isDev, browserSync)));
+    gulp.task("copy", runStream("copy", allTasks.copy.fn(isDev)));
 
     // remote copy to dist.
     gulp.task(
         "remote_copy",
-        runStream("remote_copy", allTasks.remote_copy.fn(isDev, browserSync))
+        runStream("remote_copy", allTasks.remote_copy.fn(isDev))
     );
 
     // prefix scss files.
     gulp.task(
         "prefix_scss",
-        runStream("prefix_scss", allTasks.prefix_scss.fn(isDev, browserSync))
+        runStream("prefix_scss", allTasks.prefix_scss.fn(isDev))
     );
 
     // compile scss.
     gulp.task(
         "compile_scss",
-        runStream("compile_scss", allTasks.compile_scss.fn(isDev, browserSync))
+        runStream("compile_scss", allTasks.compile_scss.fn(isDev))
     );
 
     // compile scss rtl.
     gulp.task(
         "compile_scss_rtl",
-        runStream(
-            "compile_scss_rtl",
-            allTasks.compile_scss_rtl.fn(isDev, browserSync)
-        )
+        runStream("compile_scss_rtl", allTasks.compile_scss_rtl.fn(isDev))
     );
 
     // compile js.
     gulp.task(
         "compile_js",
-        runStream("compile_js", allTasks.compile_js.fn(isDev, browserSync))
+        runStream("compile_js", allTasks.compile_js.fn(isDev))
     );
 
     // compile jsx.
     gulp.task(
         "compile_jsx",
-        runStream("compile_jsx", allTasks.compile_jsx.fn(isDev, browserSync))
+        runStream("compile_jsx", allTasks.compile_jsx.fn(isDev))
     );
 
     // template files.
     gulp.task(
         "template_files",
-        runStream(
-            "template_files",
-            allTasks.template_files.fn(isDev, browserSync)
-        )
+        runStream("template_files", allTasks.template_files.fn(isDev))
     );
 
     // correct line endings.
@@ -150,21 +141,18 @@ module.exports = function (tasks = [], config) {
         "correct_line_endings",
         runStream(
             "correct_line_endings",
-            allTasks.correct_line_endings.fn(isDev, browserSync)
+            allTasks.correct_line_endings.fn(isDev)
         )
     );
 
     // translate PHP.
     gulp.task(
         "translate_php",
-        runStream(
-            "translate_php",
-            allTasks.translate_php.fn(isDev, browserSync)
-        )
+        runStream("translate_php", allTasks.translate_php.fn(isDev))
     );
 
     // ZIP task.
-    gulp.task("zip", runStream("zip", allTasks.zip.fn(isDev, browserSync)));
+    gulp.task("zip", runStream("zip", allTasks.zip.fn(isDev)));
 
     // build task.
     gulp.task(
@@ -195,9 +183,9 @@ module.exports = function (tasks = [], config) {
     gulp.task(
         "bs_init",
         runStream("", (cfg, cb) => {
-            if (!bsInited && cfg.browser_sync) {
-                bsInited = true;
-                browserSync.init(cfg.browser_sync);
+            if (cfg.browser_sync) {
+                cfg.bs = browserSync.create(cfg.name);
+                cfg.bs.init(cfg.browser_sync);
             }
 
             cb();
@@ -208,8 +196,8 @@ module.exports = function (tasks = [], config) {
     gulp.task(
         "bs_reload",
         runStream("", (cfg, cb) => {
-            if (bsInited) {
-                browserSync.reload();
+            if (cfg.bs) {
+                cfg.bs.reload();
             }
             cb();
         })
