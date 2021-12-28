@@ -89,5 +89,5 @@ module.exports = {
             .pipe(gulp.dest(cfg.compile_scss_files_dist))
 
             // Browser Sync
-            .pipe($.if(!!cfg.bs, () => cfg.bs.stream())),
+            .pipe(cfg.bs ? cfg.bs.stream() : $.noop()),
 };
