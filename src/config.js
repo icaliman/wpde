@@ -78,12 +78,16 @@ const defaultConfig = {
 
     // Watch files.
     watch_files: "",
+    watch_files_opts: {},
 
     watch_js_files: "",
+    watch_js_files_opts: {},
 
     watch_jsx_files: "",
+    watch_jsx_files_opts: {},
 
     watch_scss_files: "",
+    watch_scss_files_opts: {},
 };
 
 /**

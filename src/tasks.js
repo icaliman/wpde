@@ -211,6 +211,7 @@ module.exports = function (tasks = [], config) {
                 if (cfg.watch_files) {
                     gulp.watch(
                         cfg.watch_files,
+                        cfg.watch_files_opts,
                         gulp.series(
                             "copy",
                             "template_files",
@@ -224,6 +225,7 @@ module.exports = function (tasks = [], config) {
                 if (cfg.watch_js_files) {
                     gulp.watch(
                         cfg.watch_js_files,
+                        cfg.watch_js_files_opts,
                         gulp.series("compile_js", "bs_reload")
                     );
                 }
@@ -231,6 +233,7 @@ module.exports = function (tasks = [], config) {
                 if (cfg.watch_jsx_files) {
                     gulp.watch(
                         cfg.watch_jsx_files,
+                        cfg.watch_jsx_files_opts,
                         gulp.series("compile_jsx", "bs_reload")
                     );
                 }
@@ -238,6 +241,7 @@ module.exports = function (tasks = [], config) {
                 if (cfg.watch_scss_files) {
                     gulp.watch(
                         cfg.watch_scss_files,
+                        cfg.watch_scss_files_opts,
                         gulp.series("compile_scss", "compile_scss_rtl")
                     );
                 }
