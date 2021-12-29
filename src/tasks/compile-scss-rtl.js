@@ -7,6 +7,7 @@ const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
 const generateCSSComments = require("../generate-css-comments");
+const templateFiles = require("./template-files");
 
 const $ = gulpLoadPlugins();
 
@@ -84,6 +85,9 @@ module.exports = {
 
             // Sourcemaps
             .pipe($.if(isDev, $.sourcemaps.write()))
+
+            // Replate patterns.
+            .pipe(templateFiles.replacePatternsPipe(cfg))
 
             // Dest
             .pipe(gulp.dest(cfg.compile_scss_files_dist))

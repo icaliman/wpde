@@ -2,6 +2,7 @@ const gulp = require("gulp");
 const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
+const templateFiles = require("./template-files");
 
 const $ = gulpLoadPlugins();
 
@@ -21,5 +22,9 @@ module.exports = {
                 })
             )
             .pipe($.if(isDev, $.changed(cfg.remote_copy_files_dist)))
+
+            // Replate patterns.
+            .pipe(templateFiles.replacePatternsPipe(cfg))
+
             .pipe(gulp.dest(cfg.remote_copy_files_dist)),
 };

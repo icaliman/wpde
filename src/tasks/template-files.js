@@ -101,20 +101,43 @@ function replacePatterns(cont, patterns, cb) {
     })();
 }
 
+/**
+ * Get patterns.
+ *
+ * @param {object} cfg
+ * @return {array} Pattern list
+ */
+function getPatterns(cfg) {
+    const patterns = Object.keys(cfg.template_files_variables)
+        .filter((k) => "undefined" !== typeof cfg.template_files_variables[k])
+        .map((k) => ({
+            match: k,
+            replacement: cfg.template_files_variables[k],
+        }));
+    return patterns;
+}
+
 module.exports = {
     label: "Template Files",
     isAllowed(cfg) {
         return cfg.template_files_src && cfg.template_files_dist;
     },
+    replacePatternsPipe(cfg) {
+        if (!cfg.template_files_src_match) {
+            return $.noop();
+        }
+
+        const patterns = getPatterns(cfg);
+
+        return $.if(
+            cfg.template_files_src_match,
+            $.change((cont, cb) => {
+                return replacePatterns(cont, patterns, cb);
+            })
+        );
+    },
     fn: (isDev) => (cfg, cb) => {
-        const patterns = Object.keys(cfg.template_files_variables)
-            .filter(
-                (k) => "undefined" !== typeof cfg.template_files_variables[k]
-            )
-            .map((k) => ({
-                match: k,
-                replacement: cfg.template_files_variables[k],
-            }));
+        const patterns = getPatterns(cfg);
 
         if (!patterns.length) {
             cb();

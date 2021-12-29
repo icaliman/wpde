@@ -6,6 +6,7 @@ const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
 const webpackconfig = require("../../webpack.config");
+const templateFiles = require("./template-files");
 
 const $ = gulpLoadPlugins();
 
@@ -37,6 +38,9 @@ module.exports = {
                     })
                 )
             )
+
+            // Replate patterns.
+            .pipe(templateFiles.replacePatternsPipe(cfg))
 
             // Dest
             .pipe(gulp.dest(cfg.compile_jsx_files_dist)),
