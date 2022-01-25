@@ -1,10 +1,7 @@
 const gulp = require("gulp");
-const path = require("path");
-const named = require("vinyl-named-with-path");
 const webpack = require("webpack");
 const $webpack = require("webpack-stream");
 const gulpLoadPlugins = require("gulp-load-plugins");
-const through2 = require("through2");
 
 const plumberErrorHandler = require("../plumber-error-handler");
 const webpackconfig = require("../../webpack.config");

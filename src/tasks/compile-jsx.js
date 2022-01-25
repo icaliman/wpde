@@ -1,5 +1,4 @@
 const gulp = require("gulp");
-const named = require("vinyl-named-with-path");
 const webpack = require("webpack");
 const $webpack = require("webpack-stream");
 const gulpLoadPlugins = require("gulp-load-plugins");
@@ -25,7 +24,6 @@ module.exports = {
                     inherit: isDev,
                 })
             )
-            .pipe(named())
 
             // Add cfg.name prefix to prevent issues with multiple configs
             .pipe(gulpHelpers.namedWithPrefix(cfg.name))
