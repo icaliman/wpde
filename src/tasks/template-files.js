@@ -122,7 +122,7 @@ module.exports = {
     isAllowed(cfg) {
         return cfg.template_files_src && cfg.template_files_dist;
     },
-    replacePatternsPipe(cfg) {
+    replacePatternsPipe(cfg, task) {
         if (!cfg.template_files_src_match) {
             return $.noop();
         }

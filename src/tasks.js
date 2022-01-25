@@ -56,13 +56,13 @@ module.exports = function (tasks = [], config) {
         return (done) => {
             const dynamicTasks = [];
 
-            configs.forEach((data) => {
+            configs.forEach((cfg) => {
                 if (
                     !name ||
                     !allTasks[name] ||
-                    allTasks[name].isAllowed(data, isDev)
+                    allTasks[name].isAllowed(cfg, isDev)
                 ) {
-                    dynamicTasks.push((cb) => func(data, cb));
+                    dynamicTasks.push((cb) => func(cfg, cb));
                 }
             });
 

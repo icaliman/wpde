@@ -67,7 +67,7 @@ module.exports = {
             .pipe($.if(isDev, $.sourcemaps.write()))
 
             // Replate patterns.
-            .pipe(templateFiles.replacePatternsPipe(cfg))
+            .pipe(templateFiles.replacePatternsPipe(cfg, "compile-scss"))
 
             // Dest
             .pipe(gulp.dest(cfg.compile_scss_files_dist))

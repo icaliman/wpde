@@ -23,7 +23,7 @@ module.exports = {
             .pipe($.if(isDev, $.changed(cfg.copy_files_dist)))
 
             // Replate patterns.
-            .pipe(templateFiles.replacePatternsPipe(cfg))
+            .pipe(templateFiles.replacePatternsPipe(cfg, "copy"))
 
             // Dest.
             .pipe(gulp.dest(cfg.copy_files_dist)),

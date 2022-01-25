@@ -7,6 +7,7 @@ const gulpLoadPlugins = require("gulp-load-plugins");
 const plumberErrorHandler = require("../plumber-error-handler");
 const webpackconfig = require("../../webpack.config");
 const templateFiles = require("./template-files");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -26,8 +27,13 @@ module.exports = {
             )
             .pipe(named())
 
+            // Add cfg.name prefix to prevent issues with multiple configs
+            .pipe(gulpHelpers.namedWithPrefix(cfg.name))
+
             // Webpack.
             .pipe($webpack(webpackconfig(isDev), webpack))
+
+            .pipe(gulpHelpers.namedRemovePrefix(cfg.name))
 
             // Rename.
             .pipe(
@@ -40,7 +46,7 @@ module.exports = {
             )
 
             // Replate patterns.
-            .pipe(templateFiles.replacePatternsPipe(cfg))
+            .pipe(templateFiles.replacePatternsPipe(cfg, "compile-jsx"))
 
             // Dest
             .pipe(gulp.dest(cfg.compile_jsx_files_dist)),

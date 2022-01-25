@@ -1,12 +1,15 @@
 const gulp = require("gulp");
+const path = require("path");
 const named = require("vinyl-named-with-path");
 const webpack = require("webpack");
 const $webpack = require("webpack-stream");
 const gulpLoadPlugins = require("gulp-load-plugins");
+const through2 = require("through2");
 
 const plumberErrorHandler = require("../plumber-error-handler");
 const webpackconfig = require("../../webpack.config");
 const templateFiles = require("./template-files");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -15,34 +18,40 @@ module.exports = {
     isAllowed(cfg) {
         return cfg.compile_js_files_src && cfg.compile_js_files_dist;
     },
-    fn: (isDev) => (cfg) =>
-        gulp
-            .src(cfg.compile_js_files_src, cfg.compile_js_files_src_opts)
-            .pipe(
-                $.plumber({
-                    errorHandler: plumberErrorHandler,
-                    inherit: isDev,
-                })
-            )
-
-            .pipe(named())
-
-            // Webpack.
-            .pipe($webpack(webpackconfig(isDev), webpack))
-
-            // Rename.
-            .pipe(
-                $.if(
-                    cfg.compile_js_files_compress,
-                    $.rename({
-                        suffix: ".min",
+    fn: (isDev) => (cfg) => {
+        return (
+            gulp
+                .src(cfg.compile_js_files_src, cfg.compile_js_files_src_opts)
+                .pipe(
+                    $.plumber({
+                        errorHandler: plumberErrorHandler,
+                        inherit: isDev,
                     })
                 )
-            )
 
-            // Replate patterns.
-            .pipe(templateFiles.replacePatternsPipe(cfg))
+                // Add cfg.name prefix to prevent issues with multiple configs
+                .pipe(gulpHelpers.namedWithPrefix(cfg.name))
 
-            // Dest
-            .pipe(gulp.dest(cfg.compile_js_files_dist)),
+                // Webpack.
+                .pipe($webpack(webpackconfig(isDev), webpack))
+
+                .pipe(gulpHelpers.namedRemovePrefix(cfg.name))
+
+                // Rename.
+                .pipe(
+                    $.if(
+                        cfg.compile_js_files_compress,
+                        $.rename({
+                            suffix: ".min",
+                        })
+                    )
+                )
+
+                // Replate patterns.
+                .pipe(templateFiles.replacePatternsPipe(cfg, "compile-js"))
+
+                // Dest
+                .pipe(gulp.dest(cfg.compile_js_files_dist))
+        );
+    },
 };
