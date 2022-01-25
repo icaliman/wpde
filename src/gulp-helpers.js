@@ -1,5 +1,6 @@
 const through2 = require("through2");
 const rename = require("gulp-rename");
+const path = require("path");
 
 exports.namedWithPrefix = (prefix) => {
     return through2.obj(function (file, _, cb) {
@@ -12,8 +13,8 @@ exports.namedWithPrefix = (prefix) => {
 };
 
 exports.namedRemovePrefix = (prefix) => {
-    return rename(function (path) {
-        path.dirname = path.dirname.replace(new RegExp("^" + prefix + "/"), "");
-        return path;
+    return rename(function (file) {
+        file.dirname = file.dirname.replace(new RegExp("^" + prefix + "/"), "");
+        return file;
     });
 };
