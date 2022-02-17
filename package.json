@@ -35,7 +35,6 @@
         "css-loader": "^6.6.0",
         "del": "^6.0.0",
         "eslint-plugin-import": "^2.25.4",
-        "fibers": "^5.0.1",
         "gulp": "^4.0.2",
         "gulp-change": "^1.0.2",
         "gulp-changed": "^4.0.3",

@@ -1,5 +1,4 @@
 const gulp = require("gulp");
-const Fiber = require("fibers");
 const autoprefixer = require("autoprefixer");
 const sass = require("gulp-sass");
 const gulpLoadPlugins = require("gulp-load-plugins");
@@ -39,7 +38,6 @@ module.exports = {
             )
             .pipe(
                 sass({
-                    fiber: Fiber,
                     outputStyle: cfg.compile_scss_files_compress
                         ? "compressed"
                         : "expanded",
