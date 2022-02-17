@@ -6,7 +6,7 @@
     "homepage": "https://github.com/icaliman/wpde",
     "author": "xlite.dev <https://xlite.dev>",
     "main": "src/run.js",
-    "bin": ".bin/wpde.js",
+    "bin": "./bin/wpde",
     "scripts": {
         "wpde": "node .bin/wpde.js",
         "js-lint": "eslint --ext .js src/",
