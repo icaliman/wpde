@@ -1,7 +1,10 @@
 const gulp = require("gulp");
 const autoprefixer = require("autoprefixer");
 const rtlcss = require("rtlcss");
-const sass = require("gulp-sass");
+
+// Use Dart Sass https://sass-lang.com/dart-sass.
+const sass = require("gulp-sass")(require("sass"));
+
 const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
@@ -9,9 +12,6 @@ const generateCSSComments = require("../generate-css-comments");
 const templateFiles = require("./template-files");
 
 const $ = gulpLoadPlugins();
-
-// Use Dart Sass https://sass-lang.com/dart-sass.
-sass.compiler = require("sass");
 
 module.exports = {
     label: "SCSS RTL Compiler",
