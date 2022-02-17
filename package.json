@@ -6,9 +6,11 @@
     "homepage": "https://github.com/icaliman/wpde",
     "author": "xlite.dev <https://xlite.dev>",
     "main": "src/run.js",
-    "bin": "./bin/wpde",
+    "bin": {
+        "wpde": "./bin/wpde.js"
+    },
     "scripts": {
-        "wpde": "node .bin/wpde.js",
+        "wpde": "node ./bin/wpde.js",
         "js-lint": "eslint --ext .js src/",
         "js-lint-fix": "eslint --ext .js --fix src/",
         "update-git-hooks": "npx simple-git-hooks"
