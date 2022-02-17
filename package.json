@@ -15,7 +15,7 @@
         "js-lint-fix": "eslint --ext .js --fix src/",
         "update-git-hooks": "npx simple-git-hooks"
     },
-    "devDependencies": {
+    "dependencies": {
         "@babel/core": "^7.17.4",
         "@babel/plugin-transform-react-jsx": "^7.17.3",
         "@babel/preset-env": "^7.16.11",
