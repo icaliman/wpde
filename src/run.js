@@ -1,5 +1,4 @@
 const meow = require("meow");
-
 const { getWPEGConfig } = require("./config");
 const runTasks = require("./tasks");
 const { error } = require("./notices");
