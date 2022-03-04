@@ -70,7 +70,7 @@ async function replacePattern(cont, pattern) {
         }
 
         const matchRegExp = new RegExp(
-            `@@${matchEscaped}(\\|\\w+(:[\\w-]+)*)*`,
+            `(@@|___)${matchEscaped}(\\|\\w+(:[\\w-]+)*)*`,
             "g"
         );
 
