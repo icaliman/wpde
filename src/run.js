@@ -13,7 +13,8 @@ module.exports = function () {
 
     // prepare tasks list.
     const currentTasks = [];
-    const allowedTasks = ["clean", "build", "watch", "zip"];
+    const allowedTasks = ["clean", "build", "watch", "zip", "rsync"];
+
     allowedTasks.forEach((flag) => {
         if (cli.flags && cli.flags[flag]) {
             currentTasks.push(flag);

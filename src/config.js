@@ -104,6 +104,7 @@ const WPEGConfig = {
             -b, --build     build theme/plugin
             -w, --watch     start watch changes in files and automatically run 'build' after changes
             -z, --zip       prepare ZIP file after build
+            -r, --rsync     copy files to remote server via rsync
 
         🤫  Other options
 

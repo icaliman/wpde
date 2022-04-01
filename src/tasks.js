@@ -154,6 +154,9 @@ module.exports = function (tasks = [], config) {
     // ZIP task.
     gulp.task("zip", runStream("zip", allTasks.zip.fn(isDev)));
 
+    // Rsync task.
+    gulp.task("rsync", runStream("rsync", allTasks.rsync.fn(isDev)));
+
     // build task.
     gulp.task(
         "build",
@@ -217,6 +220,7 @@ module.exports = function (tasks = [], config) {
                             "template_files",
                             "correct_line_endings",
                             "prefix_scss",
+                            "rsync",
                             "bs_reload"
                         )
                     );
@@ -226,7 +230,7 @@ module.exports = function (tasks = [], config) {
                     gulp.watch(
                         cfg.watch_js_files,
                         cfg.watch_js_files_opts,
-                        gulp.series("compile_js", "bs_reload")
+                        gulp.series("compile_js", "rsync", "bs_reload")
                     );
                 }
 
@@ -234,7 +238,7 @@ module.exports = function (tasks = [], config) {
                     gulp.watch(
                         cfg.watch_jsx_files,
                         cfg.watch_jsx_files_opts,
-                        gulp.series("compile_jsx", "bs_reload")
+                        gulp.series("compile_jsx", "rsync", "bs_reload")
                     );
                 }
 
