@@ -159,7 +159,7 @@ module.exports = function (tasks = [], config) {
         "rsync",
         global.cli.flags.rsync
             ? runStream("rsync", allTasks.rsync.fn(isDev))
-            : () => {}
+            : (cb) => cb()
     );
 
     // build task.
