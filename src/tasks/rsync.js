@@ -2,6 +2,7 @@ const gulp = require("gulp");
 const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -12,12 +13,15 @@ module.exports = {
     },
     fn: (isDev) => (cfg, done) => {
         const rsyncTasks = cfg.rsync_copy_files.map((rsyncData) => () => {
-            return gulp.src(rsyncData.src).pipe(
-                $.rsync({
-                    ...rsyncData,
-                    src: null,
-                })
-            );
+            return gulp
+                .src(rsyncData.src)
+                .pipe(gulpHelpers.touch())
+                .pipe(
+                    $.rsync({
+                        ...rsyncData,
+                        src: null,
+                    })
+                );
         });
 
         return gulp.series(...rsyncTasks)(done);
