@@ -1,6 +1,7 @@
 const through2 = require("through2");
 const rename = require("gulp-rename");
 const path = require("path");
+const fs = require("fs");
 
 exports.namedWithPrefix = (prefix) => {
     return through2.obj(function (file, _, cb) {
@@ -22,7 +23,11 @@ exports.namedRemovePrefix = (prefix) => {
 exports.touch = () =>
     through2.obj(function (file, enc, cb) {
         if (file.stat) {
-            file.stat.atime = file.stat.mtime = file.stat.ctime = new Date();
+            const fileDate = new Date();
+
+            file.stat.atime = file.stat.mtime = file.stat.ctime = fileDate;
+
+            fs.utimes(file.path, fileDate, fileDate, function () {});
         }
         cb(null, file);
     });

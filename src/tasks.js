@@ -178,7 +178,6 @@ module.exports = function (tasks = [], config) {
             "template_files",
             "correct_line_endings",
             "translate_php",
-            "rsync",
             (cb) => {
                 endTask("Build");
                 cb();
