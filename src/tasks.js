@@ -252,7 +252,7 @@ module.exports = function (tasks = [], config) {
                     gulp.watch(
                         cfg.watch_scss_files,
                         cfg.watch_scss_files_opts,
-                        gulp.series("compile_scss", "compile_scss_rtl")
+                        gulp.series("compile_scss", "compile_scss_rtl", "rsync")
                     );
                 }
 
