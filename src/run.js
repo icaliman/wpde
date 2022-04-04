@@ -10,6 +10,7 @@ module.exports = function () {
         booleanDefault: undefined,
         flags,
     });
+    global.cli = cli;
 
     // prepare tasks list.
     const currentTasks = [];

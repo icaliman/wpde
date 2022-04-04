@@ -155,7 +155,12 @@ module.exports = function (tasks = [], config) {
     gulp.task("zip", runStream("zip", allTasks.zip.fn(isDev)));
 
     // Rsync task.
-    gulp.task("rsync", runStream("rsync", allTasks.rsync.fn(isDev)));
+    gulp.task(
+        "rsync",
+        global.cli.flags.rsync
+            ? runStream("rsync", allTasks.rsync.fn(isDev))
+            : () => {}
+    );
 
     // build task.
     gulp.task(
@@ -173,6 +178,7 @@ module.exports = function (tasks = [], config) {
             "template_files",
             "correct_line_endings",
             "translate_php",
+            "rsync",
             (cb) => {
                 endTask("Build");
                 cb();
