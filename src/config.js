@@ -135,6 +135,11 @@ const WPEGConfig = {
             type: "boolean",
         },
 
+        rsync: {
+            type: "boolean",
+            alias: "r",
+        },
+
         config: {
             type: "string",
             default: "auto",

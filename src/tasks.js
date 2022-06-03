@@ -47,7 +47,7 @@ function startTask(name) {
 
 module.exports = function (tasks = [], config) {
     // Is development.
-    const isDev = -1 !== tasks.indexOf("watch");
+    const isDev = !!global.cli.flags.dev;
 
     const configs = getConfig(config, isDev);
 
