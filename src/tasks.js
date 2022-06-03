@@ -47,7 +47,7 @@ function startTask(name) {
 
 module.exports = function (tasks = [], config) {
     // Is development.
-    const isDev = !!global.cli.flags.dev;
+    const isDev = global.cli.flags.dev || global.cli.flags.watch;
 
     const configs = getConfig(config, isDev);
 
