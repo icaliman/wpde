@@ -1,5 +1,6 @@
 const gulp = require("gulp");
 const autoprefixer = require("autoprefixer");
+const tailwindcss = require("tailwindcss");
 
 // Use Dart Sass https://sass-lang.com/dart-sass.
 const sass = require("gulp-sass")(require("sass"));
@@ -10,6 +11,14 @@ const generateCSSComments = require("../generate-css-comments");
 const templateFiles = require("./template-files");
 
 const $ = gulpLoadPlugins();
+
+// Find TailWind config
+let tailwindConfig = require("../../tailwind.config");
+let postcssPlugins = [autoprefixer()];
+
+if (tailwindConfig) {
+    postcssPlugins.push(tailwindcss());
+}
 
 module.exports = {
     label: "SCSS Compiler",
@@ -45,7 +54,7 @@ module.exports = {
             )
 
             // Autoprefixer
-            .pipe($.postcss([autoprefixer()]))
+            .pipe($.postcss(postcssPlugins))
 
             // Add TOC Comments
             .pipe($.change(generateCSSComments))

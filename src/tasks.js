@@ -130,6 +130,12 @@ module.exports = function (tasks = [], config) {
         runStream("compile_jsx", allTasks.compile_jsx.fn(isDev))
     );
 
+    // create modernizr.
+    gulp.task(
+        "modernizr",
+        runStream("modernizr", allTasks.modernizr.fn(isDev))
+    );
+
     // template files.
     gulp.task(
         "template_files",
@@ -175,6 +181,7 @@ module.exports = function (tasks = [], config) {
             gulp.parallel("compile_scss", "compile_scss_rtl"),
             gulp.parallel("compile_js", "compile_jsx"),
             "prefix_scss",
+            "modernizr",
             "template_files",
             "correct_line_endings",
             "translate_php",
@@ -235,7 +242,12 @@ module.exports = function (tasks = [], config) {
                     gulp.watch(
                         cfg.watch_js_files,
                         cfg.watch_js_files_opts,
-                        gulp.series("compile_js", "rsync", "bs_reload")
+                        gulp.series(
+                            "compile_js",
+                            "modernizr",
+                            "rsync",
+                            "bs_reload"
+                        )
                     );
                 }
 
@@ -243,7 +255,12 @@ module.exports = function (tasks = [], config) {
                     gulp.watch(
                         cfg.watch_jsx_files,
                         cfg.watch_jsx_files_opts,
-                        gulp.series("compile_jsx", "rsync", "bs_reload")
+                        gulp.series(
+                            "compile_jsx",
+                            "modernizr",
+                            "rsync",
+                            "bs_reload"
+                        )
                     );
                 }
 
@@ -251,7 +268,12 @@ module.exports = function (tasks = [], config) {
                     gulp.watch(
                         cfg.watch_scss_files,
                         cfg.watch_scss_files_opts,
-                        gulp.series("compile_scss", "compile_scss_rtl", "rsync")
+                        gulp.series(
+                            "compile_scss",
+                            "modernizr",
+                            "compile_scss_rtl",
+                            "rsync"
+                        )
                     );
                 }
 

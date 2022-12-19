@@ -6,6 +6,7 @@ const taskCompileScss = require("./compile-scss");
 const taskCompileScssRtl = require("./compile-scss-rtl");
 const taskCompileJs = require("./compile-js");
 const taskCompileJsx = require("./compile-jsx");
+const taskModernizr = require("./modernizr");
 const taskTemplateFiles = require("./template-files");
 const taskCorrectLineEndings = require("./correct-line-endings");
 const taskTranslatePhp = require("./translate-php");
@@ -21,6 +22,7 @@ module.exports = {
     compile_scss_rtl: taskCompileScssRtl,
     compile_js: taskCompileJs,
     compile_jsx: taskCompileJsx,
+    modernizr: taskModernizr,
     template_files: taskTemplateFiles,
     correct_line_endings: taskCorrectLineEndings,
     translate_php: taskTranslatePhp,

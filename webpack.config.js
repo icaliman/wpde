@@ -40,6 +40,7 @@ module.exports = function (isDev = false) {
                                 url: false,
                             },
                         },
+                        { loader: "postcss-loader" },
                         {
                             loader: "sass-loader", // compiles Sass to CSS
                         },
