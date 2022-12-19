@@ -17,7 +17,7 @@ let tailwindConfig = require("../../tailwind.config");
 let postcssPlugins = [autoprefixer()];
 
 if (tailwindConfig) {
-    postcssPlugins.push(tailwindcss());
+    postcssPlugins.push(tailwindcss(tailwindConfig));
 }
 
 module.exports = {
