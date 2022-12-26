@@ -12,72 +12,76 @@ const templateFiles = require("./template-files");
 
 const $ = gulpLoadPlugins();
 
-// Find TailWind config
-let tailwindConfig = require("../../tailwind.config");
-let postcssPlugins = [autoprefixer()];
-
-if (tailwindConfig) {
-    postcssPlugins.push(tailwindcss(tailwindConfig));
-}
-
 module.exports = {
     label: "SCSS Compiler",
     isAllowed(cfg) {
         return cfg.compile_scss_files_src && cfg.compile_scss_files_dist;
     },
-    fn: (isDev) => (cfg) =>
-        gulp
-            .src(cfg.compile_scss_files_src, cfg.compile_scss_files_src_opts)
-            .pipe(
-                $.plumber({
-                    errorHandler: plumberErrorHandler,
-                    inherit: isDev,
-                })
-            )
+    fn: (isDev) => (cfg) => {
+        let postcssPlugins = [autoprefixer()];
 
-            // Sourcemaps Init
-            .pipe($.if(isDev, $.sourcemaps.init()))
+        if (cfg.tailwindConfig) {
+            postcssPlugins.push(tailwindcss(cfg.tailwindConfig));
+        }
 
-            // SCSS
-            .pipe(
-                $.sassVariables({
-                    $rtl: false,
-                })
-            )
-            .pipe(
-                sass({
-                    outputStyle: cfg.compile_scss_files_compress
-                        ? "compressed"
-                        : "expanded",
-                    includePaths: cfg.compile_scss_include_paths,
-                }).on("error", sass.logError)
-            )
-
-            // Autoprefixer
-            .pipe($.postcss(postcssPlugins))
-
-            // Add TOC Comments
-            .pipe($.change(generateCSSComments))
-
-            // Rename
-            .pipe(
-                $.if(
-                    cfg.compile_scss_files_compress,
-                    $.rename({
-                        suffix: ".min",
+        return (
+            gulp
+                .src(
+                    cfg.compile_scss_files_src,
+                    cfg.compile_scss_files_src_opts
+                )
+                .pipe(
+                    $.plumber({
+                        errorHandler: plumberErrorHandler,
+                        inherit: isDev,
                     })
                 )
-            )
 
-            // Sourcemaps
-            .pipe($.if(isDev, $.sourcemaps.write()))
+                // Sourcemaps Init
+                .pipe($.if(isDev, $.sourcemaps.init()))
 
-            // Replate patterns.
-            .pipe(templateFiles.replacePatternsPipe(cfg, "compile-scss"))
+                // SCSS
+                .pipe(
+                    $.sassVariables({
+                        $rtl: false,
+                    })
+                )
+                .pipe(
+                    sass({
+                        outputStyle: cfg.compile_scss_files_compress
+                            ? "compressed"
+                            : "expanded",
+                        includePaths: cfg.compile_scss_include_paths,
+                    }).on("error", sass.logError)
+                )
 
-            // Dest
-            .pipe(gulp.dest(cfg.compile_scss_files_dist))
+                // Autoprefixer
+                .pipe($.postcss(postcssPlugins))
 
-            // Browser Sync
-            .pipe(cfg.bs ? cfg.bs.stream() : $.noop()),
+                // Add TOC Comments
+                .pipe($.change(generateCSSComments))
+
+                // Rename
+                .pipe(
+                    $.if(
+                        cfg.compile_scss_files_compress,
+                        $.rename({
+                            suffix: ".min",
+                        })
+                    )
+                )
+
+                // Sourcemaps
+                .pipe($.if(isDev, $.sourcemaps.write()))
+
+                // Replate patterns.
+                .pipe(templateFiles.replacePatternsPipe(cfg, "compile-scss"))
+
+                // Dest
+                .pipe(gulp.dest(cfg.compile_scss_files_dist))
+
+                // Browser Sync
+                .pipe(cfg.bs ? cfg.bs.stream() : $.noop())
+        );
+    },
 };
