@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const chalk = require("chalk");
 const prettyHrtime = require("pretty-hrtime");
+const esbuild = require("esbuild");
 
 const { time } = require("./notices");
 
@@ -24,6 +25,17 @@ exports.namedRemovePrefix = (prefix) => {
         return file;
     });
 };
+
+exports.esbuild = (dir) =>
+    through2.obj(async function (file, enc, cb) {
+        esbuild
+            .build({
+                entryPoints: [file.path],
+                bundle: true,
+                outdir: dir,
+            })
+            .then(cb(null, file));
+    });
 
 exports.touch = () =>
     through2.obj(function (file, enc, cb) {

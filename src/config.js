@@ -33,7 +33,9 @@ const defaultConfig = {
     compile_scss_files_src: "",
     compile_scss_files_src_opts: {},
     compile_scss_files_dist: "{dist}",
+    compile_scss_output_style: "expanded",
     compile_scss_files_compress: true,
+    compile_scss_include_paths: [],
     compile_scss_files_rtl: false,
 
     // Compile JS files.

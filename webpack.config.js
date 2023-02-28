@@ -13,7 +13,10 @@ module.exports = function (isDev = false) {
         cache: {
             type: "filesystem",
         },
-        mode: isDev ? "development" : "production",
+        mode: "production", //isDev ? "development" : "production",
+        optimization: {
+            minimize: false,
+        },
         stats: "minimal",
         target: ["web", "es5"],
         devtool: isDev ? "inline-source-map" : false,
