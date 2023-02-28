@@ -29,6 +29,8 @@ module.exports = {
                 // Replate patterns.
                 .pipe(modernizr(cfg.modernizr_opts))
 
+                .pipe(gulpHelpers.count("Modernizr checked"))
+
                 // Dest
                 .pipe(gulp.dest(cfg.modernizr_files_dist))
         );

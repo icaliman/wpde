@@ -46,6 +46,8 @@ module.exports = {
             // Replate patterns.
             .pipe(templateFiles.replacePatternsPipe(cfg, "compile-jsx"))
 
+            .pipe(gulpHelpers.count("Compiled JSX"))
+
             // Dest
             .pipe(gulp.dest(cfg.compile_jsx_files_dist)),
 };

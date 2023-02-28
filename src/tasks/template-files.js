@@ -2,6 +2,7 @@ const gulp = require("gulp");
 const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -146,14 +147,20 @@ module.exports = {
 
         return gulp
             .src(cfg.template_files_src, cfg.template_files_src_opts)
+
             .pipe(
                 $.plumber({
                     errorHandler: plumberErrorHandler,
                     inherit: isDev,
                 })
             )
+
             .pipe($.if(isDev, $.changed(cfg.template_files_src)))
+
             .pipe($.change((cont, cb) => replacePatterns(cont, patterns, cb)))
+
+            .pipe(gulpHelpers.count("Replaced template patterns"))
+
             .pipe(gulp.dest(cfg.template_files_dist));
     },
 };

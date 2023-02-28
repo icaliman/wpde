@@ -2,6 +2,7 @@ const gulp = require("gulp");
 const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -25,5 +26,8 @@ module.exports = {
             )
             .pipe($.sort())
             .pipe($.wpPot(cfg.translate_php_options))
+
+            .pipe(gulpHelpers.count("Translate checked"))
+
             .pipe(gulp.dest(cfg.translate_php_files_dist)),
 };

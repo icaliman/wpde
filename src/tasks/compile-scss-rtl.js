@@ -10,6 +10,7 @@ const gulpLoadPlugins = require("gulp-load-plugins");
 const plumberErrorHandler = require("../plumber-error-handler");
 const generateCSSComments = require("../generate-css-comments");
 const templateFiles = require("./template-files");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -89,6 +90,8 @@ module.exports = {
 
             // Dest
             .pipe(gulp.dest(cfg.compile_scss_files_dist))
+
+            .pipe(gulpHelpers.count("Compiled SCSS / RTL"))
 
             // Browser Sync
             .pipe(cfg.bs ? cfg.bs.stream() : $.noop()),

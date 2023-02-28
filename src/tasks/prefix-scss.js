@@ -4,6 +4,7 @@ const postCssScss = require("postcss-scss");
 const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -28,6 +29,8 @@ module.exports = {
                     syntax: postCssScss,
                 })
             )
+
+            .pipe(gulpHelpers.count("Prefixed SCSS"))
 
             // Dest
             .pipe(gulp.dest(cfg.prefix_scss_files_dist)),

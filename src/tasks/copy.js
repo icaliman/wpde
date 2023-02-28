@@ -3,6 +3,7 @@ const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
 const templateFiles = require("./template-files");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -24,6 +25,8 @@ module.exports = {
 
             // Replate patterns.
             .pipe(templateFiles.replacePatternsPipe(cfg, "copy"))
+
+            .pipe(gulpHelpers.count("Copied"))
 
             // Dest.
             .pipe(gulp.dest(cfg.copy_files_dist)),

@@ -47,6 +47,8 @@ module.exports = {
                 // Replate patterns.
                 .pipe(templateFiles.replacePatternsPipe(cfg, "compile-js"))
 
+                .pipe(gulpHelpers.count("Compiled JS"))
+
                 // Dest
                 .pipe(gulp.dest(cfg.compile_js_files_dist))
         );

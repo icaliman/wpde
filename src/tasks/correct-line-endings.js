@@ -2,6 +2,7 @@ const gulp = require("gulp");
 const gulpLoadPlugins = require("gulp-load-plugins");
 
 const plumberErrorHandler = require("../plumber-error-handler");
+const gulpHelpers = require("../gulp-helpers");
 
 const $ = gulpLoadPlugins();
 
@@ -27,5 +28,8 @@ module.exports = {
             )
             .pipe($.if(isDev, $.changed(cfg.correct_line_endings_files_src)))
             .pipe($.lineEndingCorrector())
+
+            .pipe(gulpHelpers.count("Corrented line endings"))
+
             .pipe(gulp.dest(cfg.correct_line_endings_files_dist)),
 };

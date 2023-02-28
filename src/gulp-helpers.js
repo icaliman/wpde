@@ -1,7 +1,12 @@
 const through2 = require("through2");
+const Spinnies = require("spinnies");
 const rename = require("gulp-rename");
 const path = require("path");
 const fs = require("fs");
+const chalk = require("chalk");
+const prettyHrtime = require("pretty-hrtime");
+
+const { time } = require("./notices");
 
 exports.namedWithPrefix = (prefix) => {
     return through2.obj(function (file, _, cb) {
@@ -31,3 +36,54 @@ exports.touch = () =>
         }
         cb(null, file);
     });
+
+const currentLogs = {};
+const spinnies = new Spinnies({ color: "white", succeedColor: "white" });
+
+function endCount(name, count) {
+    if (currentLogs[name]) {
+        spinnies.succeed(name, {
+            text: [
+                time(),
+                " ",
+                chalk.blue(name || ""),
+                ": ",
+                chalk.green(count + " files"),
+                " after ",
+                chalk.red(prettyHrtime(process.hrtime(currentLogs[name]))),
+            ].join(""),
+        });
+        delete currentLogs[name];
+    }
+}
+function startCount(name) {
+    // Already running
+    if (currentLogs[name]) {
+        endTask(name);
+    }
+
+    // Create new log
+    spinnies.add(name, {
+        text: [time(), " ", chalk.blue(name || "")].join(""),
+    });
+    currentLogs[name] = process.hrtime();
+}
+
+exports.count = (message) => {
+    let count = 0;
+
+    startCount(message);
+
+    return through2.obj(
+        function (file, enc, cb) {
+            count++;
+
+            cb(null, file);
+        },
+        function (cb) {
+            endCount(message, count);
+
+            cb();
+        }
+    );
+};
