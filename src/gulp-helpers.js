@@ -71,7 +71,7 @@ function endCount(name, count) {
 function startCount(name) {
     // Already running
     if (currentLogs[name]) {
-        endTask(name);
+        endCount(name);
     }
 
     // Create new log
