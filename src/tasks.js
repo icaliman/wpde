@@ -3,6 +3,7 @@ const Spinnies = require("spinnies");
 const chalk = require("chalk");
 const prettyHrtime = require("pretty-hrtime");
 const browserSync = require("browser-sync");
+const chokidar = require("chokidar");
 
 // Internal data.
 const allTasks = require("./tasks/index");
@@ -43,6 +44,14 @@ function startTask(name) {
         ].join(""),
     });
     currentLogs[name] = process.hrtime();
+}
+
+function watchFiles(files, options, cb) {
+    let watcher = chokidar.watch(files, options);
+
+    watcher.on("raw", (evt, filePath, meta) => {
+        cb();
+    });
 }
 
 module.exports = function (tasks = [], config) {
@@ -224,7 +233,7 @@ module.exports = function (tasks = [], config) {
         gulp.series("bs_init", () => {
             runStream("", (cfg, cb) => {
                 if (cfg.watch_files) {
-                    gulp.watch(
+                    watchFiles(
                         cfg.watch_files,
                         cfg.watch_files_opts,
                         gulp.series(
@@ -239,7 +248,7 @@ module.exports = function (tasks = [], config) {
                 }
 
                 if (cfg.watch_js_files) {
-                    gulp.watch(
+                    watchFiles(
                         cfg.watch_js_files,
                         cfg.watch_js_files_opts,
                         gulp.series(
@@ -252,7 +261,7 @@ module.exports = function (tasks = [], config) {
                 }
 
                 if (cfg.watch_jsx_files) {
-                    gulp.watch(
+                    watchFiles(
                         cfg.watch_jsx_files,
                         cfg.watch_jsx_files_opts,
                         gulp.series(
@@ -265,7 +274,7 @@ module.exports = function (tasks = [], config) {
                 }
 
                 if (cfg.watch_scss_files) {
-                    gulp.watch(
+                    watchFiles(
                         cfg.watch_scss_files,
                         cfg.watch_scss_files_opts,
                         gulp.series(
