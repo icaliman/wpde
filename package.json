@@ -32,7 +32,6 @@
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-prettier": "^4.0.0",
         "event-stream": "^4.0.1",
-        "fs-extra": "^11.2.0",
         "gulp": "^4.0.2",
         "gulp-change": "^1.0.2",
         "gulp-changed": "^4.0.3",
