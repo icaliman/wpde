@@ -1,8 +1,5 @@
 const gulp = require("gulp");
-const autoprefixer = require("autoprefixer");
-const tailwindcss = require("tailwindcss");
 const cleanCSS = require("gulp-clean-css");
-const lazypipe = require("lazypipe");
 
 // Use Dart Sass https://sass-lang.com/dart-sass.
 const sass = require("gulp-sass")(require("sass"));
@@ -21,12 +18,6 @@ module.exports = {
         return cfg.compile_scss_files_src && cfg.compile_scss_files_dist;
     },
     fn: (isDev) => (cfg) => {
-        let postcssPlugins = [autoprefixer()];
-
-        if (cfg.tailwindConfig) {
-            postcssPlugins.push(tailwindcss(cfg.tailwindConfig));
-        }
-
         let compress = !isDev && cfg.compile_scss_files_compress;
 
         return (
@@ -59,7 +50,7 @@ module.exports = {
                 )
 
                 // Autoprefixer
-                .pipe($.postcss(postcssPlugins))
+                .pipe($.postcss(cfg.postcss_config))
 
                 // Add TOC Comments
                 .pipe($.change(generateCSSComments))

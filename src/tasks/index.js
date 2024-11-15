@@ -9,7 +9,6 @@ const taskCompileJsx = require("./compile-jsx");
 const taskModernizr = require("./modernizr");
 const taskTemplateFiles = require("./template-files");
 const taskCorrectLineEndings = require("./correct-line-endings");
-const taskTranslatePhp = require("./translate-php");
 const taskZip = require("./zip");
 const taskRsync = require("./rsync");
 
@@ -25,7 +24,6 @@ module.exports = {
     modernizr: taskModernizr,
     template_files: taskTemplateFiles,
     correct_line_endings: taskCorrectLineEndings,
-    translate_php: taskTranslatePhp,
     zip: taskZip,
     rsync: taskRsync,
 };

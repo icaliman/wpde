@@ -38,6 +38,13 @@ const defaultConfig = {
     compile_scss_include_paths: [],
     compile_scss_files_rtl: false,
 
+    // PostCSS plugins.
+    postcss_config: {
+        plugins: {
+            autoprefixer: {},
+        },
+    },
+
     // Compile JS files.
     compile_js_files_src: "",
     compile_js_files_src_opts: {},
@@ -60,17 +67,6 @@ const defaultConfig = {
     correct_line_endings_files_src: "",
     correct_line_endings_files_src_opts: {},
     correct_line_endings_files_dist: "{dist}",
-
-    // Translate PHP files.
-    translate_php_files_src: "",
-    translate_php_files_src_opts: {},
-    translate_php_files_dist: "",
-    translate_php_options: {
-        domain: "",
-        package: "",
-        lastTranslator: "",
-        team: "",
-    },
 
     // ZIP files.
     zip_files: [],

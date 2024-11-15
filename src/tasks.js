@@ -160,12 +160,6 @@ module.exports = function (tasks = [], config) {
         )
     );
 
-    // translate PHP.
-    gulp.task(
-        "translate_php",
-        runStream("translate_php", allTasks.translate_php.fn(isDev))
-    );
-
     // ZIP task.
     gulp.task("zip", runStream("zip", allTasks.zip.fn(isDev)));
 
@@ -193,7 +187,6 @@ module.exports = function (tasks = [], config) {
             "modernizr",
             "template_files",
             "correct_line_endings",
-            "translate_php",
             (cb) => {
                 endTask("Build");
                 cb();

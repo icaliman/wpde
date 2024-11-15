@@ -9,7 +9,7 @@
 WPDE works only with config in your theme/plugin directory. Create file `wpde.config.js`.
 
 ```javascript
-const pkg = require( 'json-file' ).read( './package.json' ).data;
+const pkg = require('./package.json');
 
 const cfg = {};
 
@@ -23,6 +23,9 @@ cfg.dist = '{dist_root}/{name}';
 cfg.browser_sync = {
     proxy: '{name}.local',
 };
+
+// PostCSS config.
+cfg.postcss_config = require('./postcss.config.js');
 
 // Template variables that will be automatically replaced.
 // Search and replace all template variables like: @@text_domain, @@text_domain,
@@ -95,16 +98,6 @@ cfg.compile_jsx_files_src = [
 
 // Correct line endings files.
 cfg.correct_line_endings_files_src = '{dist}/**/*.{js,css}';
-
-// Translate PHP files.
-cfg.translate_php_files_src = '{dist}/**/*.php';
-cfg.translate_php_files_dist = `{dist}/languages/${ cfg.template_files_variables.plugin_name }.pot`;
-cfg.translate_php_options = {
-    domain: cfg.template_files_variables.text_domain,
-    package: cfg.template_files_variables.plugin_title,
-    lastTranslator: cfg.template_files_variables.plugin_author,
-    team: cfg.template_files_variables.plugin_author,
-};
 
 // ZIP files.
 cfg.zip_files = [
